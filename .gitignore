@@ -1,0 +1,41 @@
+@'
+# VirtualBox files and appliances
+*.ova
+*.ovf
+*.vdi
+*.vmdk
+*.vhd
+*.vhdx
+*.vbox
+*.vbox-prev
+*.sav
+
+# ISO files
+*.iso
+
+# Logs and temporary files
+*.log
+*.tmp
+*.temp
+
+# Backups
+*.backup
+*.bak
+*.old
+
+# Credentials and private keys
+.env
+.env.*
+*.pem
+*.key
+*.p12
+*.pfx
+id_rsa
+id_ed25519
+
+# OS and editor files
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+'@ | Set-Content -Encoding utf8 .gitignore

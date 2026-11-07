@@ -1,0 +1,48 @@
+<!-- Local rules -->
+
+<!-- Modify it at your will. -->
+<!-- Copyright (C) 2015, Wazuh Inc. -->
+
+<!-- Example -->
+<!-- Windows repeated failed login detection -->
+
+<group name="local,syslog,sshd,">
+
+   <rule id="100100" level="10" frequency="5" timeframe="120">
+    <if_matched_sid>60122</if_matched_sid>
+    <same_field>win.eventdata.ipAddress</same_field>
+    <description>Possible brute-force attack: 5 failed Windows logins from the same source IP within 120 seconds.</description>
+    <group>authentication_failed,windows,brute_force,</group>
+  </rule>
+
+
+  <!--
+  Dec 10 01:02:02 host sshd[1234]: Failed none for root from 1.1.1.1 port 1066 ssh2
+  -->
+  <rule id="100001" level="5">
+    <if_sid>5716</if_sid>
+    <srcip>1.1.1.1</srcip>
+    <description>sshd: authentication failed from IP 1.1.1.1.</description>
+    <group>authentication_failed,pci_dss_10.2.4,pci_dss_10.2.5,</group>
+  </rule>
+
+    <!-- Phase 8.1: PowerShell Script Block Logging Detection -->
+  <rule id="100200" level="5">
+    <if_sid>91802</if_sid>
+    <description>Windows PowerShell Script Block Logging event detected (Event ID 4104).</description>
+    <group>windows,powershell,script_block_logging,</group>
+  </rule>
+
+    <!-- Phase 8.5: Encoded PowerShell Detection -->
+  <rule id="100300" level="10">
+    <if_sid>67027</if_sid>
+    <field name="win.eventdata.commandLine" type="pcre2">(?i)-EncodedCommand</field>
+    <description>Suspicious PowerShell execution using an encoded command.</description>
+    <mitre>
+      <id>T1059.001</id>
+      <id>T1027</id>
+    </mitre>
+    <group>windows,powershell,encoded_command,suspicious_execution,</group>
+  </rule>
+
+</group>
